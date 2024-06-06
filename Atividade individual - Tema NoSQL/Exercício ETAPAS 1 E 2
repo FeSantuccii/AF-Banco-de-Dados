@@ -1,0 +1,135 @@
+ETAPA 1:
+
+{
+  "configuracao_navegador":
+  {
+    "pagina_inicial": "www.google.com",
+    "idioma_preferido": "Português do Brasil",
+    "localizacao": "São Paulo",
+    "tema": "Clássico",
+    "mostrar_favoritos": true,
+    "zoom": "100%"
+  }
+}
+  
+
+
+ETAPA 2:
+--Criando tabela para endereços
+CREATE TABLE endereco (
+    EnderecoID INT PRIMARY KEY AUTO_INCREMENT,
+    Rua VARCHAR(100),
+    Numero INT,
+    Cidade VARCHAR(100),
+    Estado VARCHAR(2),
+    CEP VARCHAR(10),
+    Complemento Varchar(20)
+);
+
+-- Criando tabela para Emails
+CREATE TABLE email (
+    EmailID INT PRIMARY KEY AUTO_INCREMENT,
+    EnderecoEmail VARCHAR(100)
+);
+
+--Criando tabela Funcionários
+CREATE TABLE funcionarios (
+    FuncionarioID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(100),
+    EnderecoID INT,
+    Email1ID INT,
+    Email2ID INT,
+    Cargo VARCHAR(50),
+    Jornada INT,
+    Salario DECIMAL(10,2),
+    FOREIGN KEY (EnderecoID) REFERENCES endereco(EnderecoID),
+    FOREIGN KEY (Email1ID) REFERENCES email(EmailID),
+    FOREIGN KEY (Email2ID) REFERENCES email(EmailID)
+);
+
+-- Inserir endereços
+INSERT INTO endereco (Rua, Numero, Cidade, Estado)
+VALUES ('Rua Suassana', 30, 'João Pessoa', 'PB', NULL),
+       ('Rua Lovelace', 67, 'London', NULL, NULL),
+       ('Rua Substantivo', 78, 'Mesóclise', 'AC', 'Bairro Predicado') 
+       ('Rua Eurico', 50, 'João Pessoa', 'PB', Apt 28 Bloco C);
+
+-- Inserir e-mails
+INSERT INTO email (EnderecoEmail)
+VALUES ('grilo@mail.com'), 
+       ('joaog@mk.com'),
+       ('ada@mail.com'), 
+       ('abyron@tech.com'),
+       ('gerundino@gmail.com');
+
+-- Inserir funcionários
+INSERT INTO funcionarios (Nome, EnderecoID, Email1ID, Email2ID, Cargo, Jornada, Salario)
+VALUES ('João Grilo', 1, 1, 2, 'Contador', 40, 3000),
+       ('Ada Byron', 2, 3, 4, 'Developer', 20, 15000),
+       ('Gerundino', 3, 5, NULL, 'Linguista', 44, 8000),
+       ('Chicó', 4, NULL, NULL, 'Developer', 20, 15000);
+
+FORMATO JSON:
+
+{
+  "funcionarios": [
+    {
+      "Nome": "João Grilo",
+      "Endereco": {
+        "Rua": "Rua Suassana",
+        "Numero": 30,
+        "Cidade": "João Pessoa",
+        "Estado": "PB"
+      },
+      "Emails": ["grilo@mail.com", "joaog@mk.com"],
+      "Cargo": "contador",
+      "Jornada": 40,
+      "Salario": 3000
+    },
+    {
+      "Nome": "Ada Byron",
+      "Endereco": {
+        "Rua": "Rua Lovelace",
+        "Numero": 67,
+        "Cidade": "London",
+        "Estado": null
+      },
+      "Emails": ["ada@mail.com", "abyron@tech.com"],
+      "Cargo": "Developer",
+      "Jornada": 20,
+      "Salario": 15000
+    },
+    {
+      "Nome": "Gerundino",
+      "Endereco": {
+        "Rua": "Rua Lovelace",
+        "Numero": 67,
+        "Cidade": "London",
+        "Estado": null
+      },
+      "Emails": ["gerundino@gmail.com"],
+      "Cargo": "Linguista",
+      "Jornada": 44,
+      "Salario": 8000
+    },
+    {
+      "Nome": "Chicó",
+      "Endereco": {
+        "Rua": "Rua Eurico",
+        "Numero": 50,
+        "Cidade": "João Pessoa",
+        "Estado": "PB",
+        "Complemento": "Apt 28, Bloco C"
+      },
+      "Emails": [],
+      "Cargo": "Developer",
+      "Jornada": 20,
+      "Salario": 15000
+    }
+  ]
+}
+
+
+
+
+
