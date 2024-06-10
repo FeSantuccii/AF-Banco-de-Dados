@@ -20,7 +20,7 @@ CREATE TABLE Alunos (
 CREATE TABLE Matriculas (
     idMatriculas INT AUTO_INCREMENT PRIMARY KEY,
     idAlunos INT,
-    idAlunos INT,
+    idCursos INT,
     FOREIGN KEY (idAlunos) REFERENCES Alunos(idAlunos),
-    FOREIGN KEY (idAlunos) REFERENCES Cursos(idCursos)
+    FOREIGN KEY (idCursos) REFERENCES Cursos(idCursos)
 );
