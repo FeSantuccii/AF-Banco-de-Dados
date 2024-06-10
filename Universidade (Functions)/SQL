@@ -1,0 +1,26 @@
+CREATE TABLE Areas (
+    idAreas INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+CREATE TABLE Cursos (
+    idCursos INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(50),
+    idAreas INT,
+    FOREIGN KEY (idAreas) REFERENCES Areas(idAreas)
+);
+
+CREATE TABLE Alunos (
+    idAlunos INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(40),
+    Sobrenome VARCHAR(40),
+    Email VARCHAR(100)
+);
+
+CREATE TABLE Matriculas (
+    idMatriculas INT AUTO_INCREMENT PRIMARY KEY,
+    idAlunos INT,
+    idAlunos INT,
+    FOREIGN KEY (idAlunos) REFERENCES Alunos(idAlunos),
+    FOREIGN KEY (idAlunos) REFERENCES Cursos(idCursos)
+);
