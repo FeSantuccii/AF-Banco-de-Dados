@@ -1,8 +1,6 @@
 Título: Atividade individual - Tema: Locação de Automóveis (NORMALIZAÇÃO)
 
-Descrição: -
-
-Normalização de tabela SQL
+Descrição: Normalização de tabela SQL
 
 Modelo Lógico :
 
