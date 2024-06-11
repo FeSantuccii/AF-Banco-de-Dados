@@ -1,23 +1,23 @@
-CREATE TABLE Areas (
+CREATE TABLE Areas ( --Criação da tabela Areas
     idAreas INT IDENTITY(1,1) PRIMARY KEY,
     Nome VARCHAR(50)
 );
 
-CREATE TABLE Cursos (
+CREATE TABLE Cursos ( --Criação da tabela Cursos
     idCursos INT IDENTITY(1,1) PRIMARY KEY,
     Nome VARCHAR(50),
     idAreas INT,
     FOREIGN KEY (idAreas) REFERENCES Areas(idAreas)
 );
 
-CREATE TABLE Alunos (
+CREATE TABLE Alunos ( --Criação da tabela Alunos
     idAlunos INT IDENTITY(1,1) PRIMARY KEY,
     Nome VARCHAR(40),
     Sobrenome VARCHAR(40),
     Email VARCHAR(100)
 );
 
-CREATE TABLE Matriculas (
+CREATE TABLE Matriculas ( --Criação da tabela Matriculas
     idMatriculas INT IDENTITY(1,1) PRIMARY KEY,
     idAlunos INT,
     idCursos INT,
