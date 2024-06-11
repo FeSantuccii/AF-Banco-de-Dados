@@ -24,3 +24,530 @@ CREATE TABLE Matriculas (
     FOREIGN KEY (idAlunos) REFERENCES Alunos(idAlunos),
     FOREIGN KEY (idCursos) REFERENCES Cursos(idCursos)
 );
+
+INSERT INTO Areas (Nome) -- inserindo exemplos em Areas
+VALUES 
+('Tecnologia'),
+('Saúde'),
+('Ciências Humanas'),
+('Artes'),
+('Negócios');
+
+
+CREATE PROCEDURE InserirCurso 
+    @nomeCurso VARCHAR(50),
+    @idArea INT
+AS
+BEGIN
+    INSERT INTO Cursos (Nome, idAreas) VALUES (@nomeCurso, @idArea);
+END;
+
+
+--Procedure para selecionar os cursos
+CREATE PROCEDURE SelecionarCursos
+AS
+BEGIN
+    SELECT c.idCursos, c.Nome AS Curso, a.Nome AS Area
+    FROM Cursos c
+    JOIN Areas a ON c.idAreas = a.idAreas;
+END;
+
+
+--Procedure para selecionar cursos com ID
+CREATE FUNCTION RetornarIdCurso (
+    @nomeCurso VARCHAR(50),
+    @idArea INT
+) RETURNS INT
+AS
+BEGIN
+    DECLARE @cursoId INT;
+    SELECT @cursoId = idCursos
+    FROM Cursos
+    WHERE Nome = @nomeCurso AND idAreas = @idArea;
+    RETURN @cursoId;
+END;
+
+--Procedure para matricular aluno sem repetição
+CREATE PROCEDURE MatricularAluno 
+    @alunoId INT,
+    @cursoId INT
+AS
+BEGIN
+    DECLARE @numMatriculas INT;
+    
+    SELECT @numMatriculas = COUNT(*)
+    FROM Matriculas
+    WHERE idAlunos = @alunoId AND idCursos = @cursoId;
+    
+    IF @numMatriculas = 0
+    BEGIN
+        INSERT INTO Matriculas (idAlunos, idCursos) VALUES (@alunoId, @cursoId);
+    END
+    ELSE
+    BEGIN
+        RAISERROR ('Aluno já matriculado neste curso', 16, 1);
+    END
+END;
+
+--Inserindo os 25 cursos com cada área
+EXEC InserirCurso 'Engenharia de Software', 1; -- Área de Tecnologia
+EXEC InserirCurso 'Medicina', 2; -- Área de Saúde
+EXEC InserirCurso 'Administração de Empresas', 5; -- Área de Negócios
+EXEC InserirCurso 'Arquitetura', 4; -- Área de Artes
+EXEC InserirCurso 'Psicologia', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Direito', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Biologia Marinha', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Engenharia Civil', 4; -- Área de Artes
+EXEC InserirCurso 'Design Gráfico', 4; -- Área de Artes
+EXEC InserirCurso 'Economia', 5; -- Área de Negócios
+EXEC InserirCurso 'Marketing Digital', 5; -- Área de Negócios
+EXEC InserirCurso 'Ciência da Computação', 1; -- Área de Tecnologia
+EXEC InserirCurso 'Gestão de Recursos Humanos', 5; -- Área de Negócios
+EXEC InserirCurso 'Ciências Políticas', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Educação Física', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Música', 4; -- Área de Artes
+EXEC InserirCurso 'Agricultura Sustentável', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Fotografia', 4; -- Área de Artes
+EXEC InserirCurso 'Nutrição', 2; -- Área de Saúde
+EXEC InserirCurso 'Engenharia Elétrica', 1; -- Área de Tecnologia
+EXEC InserirCurso 'Jornalismo', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Moda', 4; -- Área de Artes
+EXEC InserirCurso 'Fisioterapia', 2; -- Área de Saúde
+EXEC InserirCurso 'Geologia', 3; -- Área de Ciências Humanas
+EXEC InserirCurso 'Cinema e Audiovisual', 4; -- Área de Artes
+
+--Procedure para inserir os alunos
+CREATE PROCEDURE InserirAluno
+    @nomeAluno VARCHAR(50),
+    @sobrenomeAluno VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Alunos (nome, sobrenome, email)
+    VALUES (@nomeAluno, @sobrenomeAluno, CONCAT(@nomeAluno, '.', @sobrenomeAluno, '@universidade.com'));
+END;
+
+--inserindo 200 alunos
+EXEC InserirAluno 'Carlos', 'Oliveira';
+EXEC InserirAluno 'Ana', 'Silva';
+EXEC InserirAluno 'Pedro', 'Souza';
+EXEC InserirAluno 'Juliana', 'Santos';
+EXEC InserirAluno 'Rafael', 'Costa';
+EXEC InserirAluno 'Fernanda', 'Pereira';
+EXEC InserirAluno 'Bruno', 'Lima';
+EXEC InserirAluno 'Vanessa', 'Almeida';
+EXEC InserirAluno 'Lucas', 'Ferreira';
+EXEC InserirAluno 'Amanda', 'Rodrigues';
+EXEC InserirAluno 'Thiago', 'Martins';
+EXEC InserirAluno 'Larissa', 'Oliveira';
+EXEC InserirAluno 'André', 'Alves';
+EXEC InserirAluno 'Camila', 'Fernandes';
+EXEC InserirAluno 'Diego', 'Barbosa';
+EXEC InserirAluno 'Letícia', 'Gomes';
+EXEC InserirAluno 'Marcelo', 'Ribeiro';
+EXEC InserirAluno 'Bianca', 'Castro';
+EXEC InserirAluno 'Gustavo', 'Cardoso';
+EXEC InserirAluno 'Marina', 'Carvalho';
+EXEC InserirAluno 'Ricardo', 'Nunes';
+EXEC InserirAluno 'Patrícia', 'Rocha';
+EXEC InserirAluno 'João', 'Santos';
+EXEC InserirAluno 'Isabela', 'Vieira';
+EXEC InserirAluno 'Leandro', 'Martins';
+EXEC InserirAluno 'Débora', 'Lima';
+EXEC InserirAluno 'Gabriel', 'Rodrigues';
+EXEC InserirAluno 'Carolina', 'Costa';
+EXEC InserirAluno 'Felipe', 'Oliveira';
+EXEC InserirAluno 'Bruna', 'Silva';
+EXEC InserirAluno 'Alex', 'Pereira';
+EXEC InserirAluno 'Mariana', 'Souza';
+EXEC InserirAluno 'Daniel', 'Fernandes';
+EXEC InserirAluno 'Jéssica', 'Almeida';
+EXEC InserirAluno 'Eduardo', 'Santos';
+EXEC InserirAluno 'Paula', 'Lima';
+EXEC InserirAluno 'Vinícius', 'Pereira';
+EXEC InserirAluno 'Ana Laura', 'Oliveira';
+EXEC InserirAluno 'Gustavo', 'Silva';
+EXEC InserirAluno 'Natália', 'Martins';
+EXEC InserirAluno 'Rafaela', 'Rodrigues';
+EXEC InserirAluno 'Caio', 'Alves';
+EXEC InserirAluno 'Letícia', 'Costa';
+EXEC InserirAluno 'Matheus', 'Carvalho';
+EXEC InserirAluno 'Marina', 'Ribeiro';
+EXEC InserirAluno 'Henrique', 'Castro';
+EXEC InserirAluno 'Aline', 'Ferreira';
+EXEC InserirAluno 'Felipe', 'Souza';
+EXEC InserirAluno 'Carla', 'Rodrigues';
+EXEC InserirAluno 'Roberto', 'Silva';
+EXEC InserirAluno 'Mariana', 'Almeida';
+EXEC InserirAluno 'Lucas', 'Santana';
+EXEC InserirAluno 'Fernanda', 'Gomes';
+EXEC InserirAluno 'André', 'Melo';
+EXEC InserirAluno 'Camila', 'Rocha';
+EXEC InserirAluno 'Pedro', 'Pereira';
+EXEC InserirAluno 'Juliana', 'Martins';
+EXEC InserirAluno 'Gustavo', 'Lima';
+EXEC InserirAluno 'Patrícia', 'Nunes';
+EXEC InserirAluno 'Rafael', 'Costa';
+EXEC InserirAluno 'Ana Carolina', 'Oliveira';
+EXEC InserirAluno 'Bruno', 'Sousa';
+EXEC InserirAluno 'Isabela', 'Fernandes';
+EXEC InserirAluno 'Renato', 'Correia';
+EXEC InserirAluno 'Amanda', 'Barbosa';
+EXEC InserirAluno 'Diego', 'Ribeiro';
+EXEC InserirAluno 'Larissa', 'Dias';
+EXEC InserirAluno 'Thiago', 'Carvalho';
+EXEC InserirAluno 'Tatiane', 'Andrade';
+EXEC InserirAluno 'Gabriel', 'Figueiredo';
+EXEC InserirAluno 'Rafaela', 'Mendes';
+EXEC InserirAluno 'Luciana', 'Silveira';
+EXEC InserirAluno 'Marcos', 'Gonçalves';
+EXEC InserirAluno 'Bruna', 'Vieira';
+EXEC InserirAluno 'Vitor', 'Fernandes';
+EXEC InserirAluno 'Fernanda', 'Cavalcante';
+EXEC InserirAluno 'José', 'Garcia';
+EXEC InserirAluno 'Carolina', 'Duarte';
+EXEC InserirAluno 'Matheus', 'Pinto';
+EXEC InserirAluno 'Aline', 'Cunha';
+EXEC InserirAluno 'Felipe', 'Machado';
+EXEC InserirAluno 'Camila', 'Leal';
+EXEC InserirAluno 'Gustavo', 'Araújo';
+EXEC InserirAluno 'Nathalia', 'Teixeira';
+EXEC InserirAluno 'Ricardo', 'Lopes';
+EXEC InserirAluno 'Larissa', 'Ferreira';
+EXEC InserirAluno 'Rodrigo', 'Nascimento';
+EXEC InserirAluno 'Mariana', 'Sales';
+EXEC InserirAluno 'Lucas', 'Xavier';
+EXEC InserirAluno 'Fernanda', 'Campos';
+EXEC InserirAluno 'André', 'Farias';
+EXEC InserirAluno 'Patrícia', 'Moura';
+EXEC InserirAluno 'Rafael', 'Dantas';
+EXEC InserirAluno 'Ana Paula', 'Cardoso';
+EXEC InserirAluno 'Bruno', 'Costa';
+EXEC InserirAluno 'Luna', 'Monteiro';
+EXEC InserirAluno 'Thor', 'Macedo';
+EXEC InserirAluno 'Estrela', 'Fonseca';
+EXEC InserirAluno 'Aurora', 'Ramos';
+EXEC InserirAluno 'Davi', 'Cavalcanti';
+EXEC InserirAluno 'Íris', 'Figueira';
+EXEC InserirAluno 'Neve', 'Barros';
+EXEC InserirAluno 'Gaia', 'Gomes';
+EXEC InserirAluno 'Sol', 'Silveira';
+EXEC InserirAluno 'Eva', 'Tavares';
+EXEC InserirAluno 'Atlas', 'Ferreira';
+EXEC InserirAluno 'Pandora', 'Albuquerque';
+EXEC InserirAluno 'Apollo', 'Garcia';
+EXEC InserirAluno 'Vênus', 'Rocha';
+EXEC InserirAluno 'Ícaro', 'Lins';
+EXEC InserirAluno 'Jasmim', 'Dantas';
+EXEC InserirAluno 'Titã', 'Diniz';
+EXEC InserirAluno 'Céu', 'Nogueira';
+EXEC InserirAluno 'Flora', 'Mendes';
+EXEC InserirAluno 'Cassiopeia', 'Pereira';
+EXEC InserirAluno 'Orion', 'Moraes';
+EXEC InserirAluno 'Nebulosa', 'Andrade';
+EXEC InserirAluno 'Terra', 'Vieira';
+EXEC InserirAluno 'Galileu', 'Castro';
+EXEC InserirAluno 'Aster', 'Campos';
+EXEC InserirAluno 'Lua', 'Ribeiro';
+EXEC InserirAluno 'Serenidade', 'Leal';
+EXEC InserirAluno 'Nuvem', 'Teixeira';
+EXEC InserirAluno 'Apolo', 'Costa';
+EXEC InserirAluno 'Estrela', 'Ferreira';
+EXEC InserirAluno 'Aurora', 'Carvalho';
+EXEC InserirAluno 'Sol', 'Gonçalves';
+EXEC InserirAluno 'Ísis', 'Almeida';
+EXEC InserirAluno 'Gaia', 'Santos';
+EXEC InserirAluno 'Neve', 'Souza';
+EXEC InserirAluno 'Artemis', 'Martins';
+EXEC InserirAluno 'Thor', 'Barbosa';
+EXEC InserirAluno 'Ícaro', 'Lima';
+EXEC InserirAluno 'Vênus', 'Pinto';
+EXEC InserirAluno 'Hércules', 'Rocha';
+EXEC InserirAluno 'Pandora', 'Dias';
+EXEC InserirAluno 'Céu', 'Nunes';
+EXEC InserirAluno 'Cassiopeia', 'Castro';
+EXEC InserirAluno 'Orion', 'Pereira';
+EXEC InserirAluno 'Nebulosa', 'Silva';
+EXEC InserirAluno 'Terra', 'Gomes';
+EXEC InserirAluno 'Galileu', 'Almeida';
+EXEC InserirAluno 'Aster', 'Fernandes';
+EXEC InserirAluno 'Lua', 'Costa';
+EXEC InserirAluno 'Serenidade', 'Ribeiro';
+EXEC InserirAluno 'Nuvem', 'Martins';
+EXEC InserirAluno 'Jackson', 'Smith';
+EXEC InserirAluno 'Sophia', 'Johnson';
+EXEC InserirAluno 'Liam', 'Williams';
+EXEC InserirAluno 'Olivia', 'Brown';
+EXEC InserirAluno 'Lucas', 'Jones';
+EXEC InserirAluno 'Emma', 'Miller';
+EXEC InserirAluno 'Mason', 'Davis';
+EXEC InserirAluno 'Ava', 'Garcia';
+EXEC InserirAluno 'Noah', 'Rodriguez';
+EXEC InserirAluno 'Isabella', 'Martinez';
+EXEC InserirAluno 'Logan', 'Hernandez';
+EXEC InserirAluno 'Amelia', 'Lopez';
+EXEC InserirAluno 'Ethan', 'Gonzalez';
+EXEC InserirAluno 'Mia', 'Wilson';
+EXEC InserirAluno 'Michael', 'Anderson';
+EXEC InserirAluno 'Harper', 'Thomas';
+EXEC InserirAluno 'Alexander', 'Taylor';
+EXEC InserirAluno 'Charlotte', 'Moore';
+EXEC InserirAluno 'Elijah', 'Jackson';
+EXEC InserirAluno 'Evelyn', 'White';
+EXEC InserirAluno 'Daniel', 'Harris';
+EXEC InserirAluno 'Abigail', 'Martin';
+EXEC InserirAluno 'James', 'Thompson';
+EXEC InserirAluno 'Avery', 'Garcia';
+EXEC InserirAluno 'Benjamin', 'Martinez';
+EXEC InserirAluno 'Emily', 'Clark';
+EXEC InserirAluno 'Henry', 'Lewis';
+EXEC InserirAluno 'Scarlett', 'Lee';
+EXEC InserirAluno 'Sebastian', 'Walker';
+EXEC InserirAluno 'Elizabeth', 'Hall';
+EXEC InserirAluno 'Matthew', 'Allen';
+EXEC InserirAluno 'Luna', 'Young';
+EXEC InserirAluno 'William', 'Hill';
+EXEC InserirAluno 'Grace', 'Wright';
+EXEC InserirAluno 'Gabriel', 'Scott';
+EXEC InserirAluno 'Chloe', 'Green';
+EXEC InserirAluno 'Owen', 'Adams';
+EXEC InserirAluno 'Zoe', 'Baker';
+EXEC InserirAluno 'Landon', 'Nelson';
+EXEC InserirAluno 'Madison', 'Carter';
+EXEC InserirAluno 'Nathan', 'Mitchell';
+EXEC InserirAluno 'Lily', 'Perez';
+EXEC InserirAluno 'Wyatt', 'Roberts';
+EXEC InserirAluno 'Aubrey', 'Turner';
+EXEC InserirAluno 'Carter', 'Phillips';
+EXEC InserirAluno 'Addison', 'Campbell';
+EXEC InserirAluno 'David', 'Parker';
+EXEC InserirAluno 'Hannah', 'Evans';
+EXEC InserirAluno 'John', 'Collins';
+EXEC InserirAluno 'Ivan', 'Sokolov';
+EXEC InserirAluno 'Anastasia', 'Ivanova';
+EXEC InserirAluno 'Dmitri', 'Kuznetsov';
+EXEC InserirAluno 'Elena', 'Petrova';
+EXEC InserirAluno 'Alexei', 'Volkov';
+EXEC InserirAluno 'Natalia', 'Sidorova';
+
+--Matriculando
+EXEC MatricularAluno '1', '12';
+EXEC MatricularAluno '2', '5';
+EXEC MatricularAluno '3', '18';
+EXEC MatricularAluno '4', '3';
+EXEC MatricularAluno '5', '20';
+EXEC MatricularAluno '6', '9';
+EXEC MatricularAluno '7', '16';
+EXEC MatricularAluno '8', '22';
+EXEC MatricularAluno '9', '11';
+EXEC MatricularAluno '10', '7';
+EXEC MatricularAluno '11', '4';
+EXEC MatricularAluno '12', '25';
+EXEC MatricularAluno '13', '8';
+EXEC MatricularAluno '14', '17';
+EXEC MatricularAluno '15', '2';
+EXEC MatricularAluno '16', '14';
+EXEC MatricularAluno '17', '23';
+EXEC MatricularAluno '18', '10';
+EXEC MatricularAluno '19', '21';
+EXEC MatricularAluno '20', '6';
+EXEC MatricularAluno '21', '15';
+EXEC MatricularAluno '22', '1';
+EXEC MatricularAluno '23', '19';
+EXEC MatricularAluno '24', '13';
+EXEC MatricularAluno '25', '24';
+EXEC MatricularAluno '26', '10';
+EXEC MatricularAluno '27', '7';
+EXEC MatricularAluno '28', '22';
+EXEC MatricularAluno '29', '16';
+EXEC MatricularAluno '30', '4';
+EXEC MatricularAluno '31', '5';
+EXEC MatricularAluno '32', '18';
+EXEC MatricularAluno '33', '21';
+EXEC MatricularAluno '34', '8';
+EXEC MatricularAluno '35', '11';
+EXEC MatricularAluno '36', '25';
+EXEC MatricularAluno '37', '3';
+EXEC MatricularAluno '38', '14';
+EXEC MatricularAluno '39', '2';
+EXEC MatricularAluno '40', '19';
+EXEC MatricularAluno '41', '12';
+EXEC MatricularAluno '42', '9';
+EXEC MatricularAluno '43', '23';
+EXEC MatricularAluno '44', '15';
+EXEC MatricularAluno '45', '6';
+EXEC MatricularAluno '46', '13';
+EXEC MatricularAluno '47', '20';
+EXEC MatricularAluno '48', '17';
+EXEC MatricularAluno '49', '24';
+EXEC MatricularAluno '50', '1';
+EXEC MatricularAluno '51', '12';
+EXEC MatricularAluno '52', '9';
+EXEC MatricularAluno '53', '11';
+EXEC MatricularAluno '54', '23';
+EXEC MatricularAluno '55', '16';
+EXEC MatricularAluno '56', '2';
+EXEC MatricularAluno '57', '18';
+EXEC MatricularAluno '58', '20';
+EXEC MatricularAluno '59', '6';
+EXEC MatricularAluno '60', '8';
+EXEC MatricularAluno '61', '22';
+EXEC MatricularAluno '62', '5';
+EXEC MatricularAluno '63', '15';
+EXEC MatricularAluno '64', '13';
+EXEC MatricularAluno '65', '1';
+EXEC MatricularAluno '66', '3';
+EXEC MatricularAluno '67', '21';
+EXEC MatricularAluno '68', '10';
+EXEC MatricularAluno '69', '17';
+EXEC MatricularAluno '70', '7';
+EXEC MatricularAluno '71', '24';
+EXEC MatricularAluno '72', '4';
+EXEC MatricularAluno '73', '25';
+EXEC MatricularAluno '74', '19';
+EXEC MatricularAluno '75', '14';
+EXEC MatricularAluno '76', '12';
+EXEC MatricularAluno '77', '9';
+EXEC MatricularAluno '78', '11';
+EXEC MatricularAluno '79', '23';
+EXEC MatricularAluno '80', '16';
+EXEC MatricularAluno '81', '2';
+EXEC MatricularAluno '82', '18';
+EXEC MatricularAluno '83', '20';
+EXEC MatricularAluno '84', '6';
+EXEC MatricularAluno '85', '8';
+EXEC MatricularAluno '86', '22';
+EXEC MatricularAluno '87', '5';
+EXEC MatricularAluno '88', '15';
+EXEC MatricularAluno '89', '13';
+EXEC MatricularAluno '90', '1';
+EXEC MatricularAluno '91', '3';
+EXEC MatricularAluno '92', '21';
+EXEC MatricularAluno '93', '10';
+EXEC MatricularAluno '94', '17';
+EXEC MatricularAluno '95', '7';
+EXEC MatricularAluno '96', '24';
+EXEC MatricularAluno '97', '4';
+EXEC MatricularAluno '98', '25';
+EXEC MatricularAluno '99', '19';
+EXEC MatricularAluno '100', '14';
+EXEC MatricularAluno '101', '12';
+EXEC MatricularAluno '102', '9';
+EXEC MatricularAluno '103', '11';
+EXEC MatricularAluno '104', '23';
+EXEC MatricularAluno '105', '16';
+EXEC MatricularAluno '106', '2';
+EXEC MatricularAluno '107', '18';
+EXEC MatricularAluno '108', '20';
+EXEC MatricularAluno '109', '6';
+EXEC MatricularAluno '110', '8';
+EXEC MatricularAluno '111', '22';
+EXEC MatricularAluno '112', '5';
+EXEC MatricularAluno '113', '15';
+EXEC MatricularAluno '114', '13';
+EXEC MatricularAluno '115', '1';
+EXEC MatricularAluno '116', '3';
+EXEC MatricularAluno '117', '21';
+EXEC MatricularAluno '118', '10';
+EXEC MatricularAluno '119', '17';
+EXEC MatricularAluno '120', '7';
+EXEC MatricularAluno '121', '24';
+EXEC MatricularAluno '122', '4';
+EXEC MatricularAluno '123', '25';
+EXEC MatricularAluno '124', '19';
+EXEC MatricularAluno '125', '14';
+EXEC MatricularAluno '126', '12';
+EXEC MatricularAluno '127', '9';
+EXEC MatricularAluno '128', '11';
+EXEC MatricularAluno '129', '23';
+EXEC MatricularAluno '130', '16';
+EXEC MatricularAluno '131', '2';
+EXEC MatricularAluno '132', '18';
+EXEC MatricularAluno '133', '20';
+EXEC MatricularAluno '134', '6';
+EXEC MatricularAluno '135', '8';
+EXEC MatricularAluno '136', '22';
+EXEC MatricularAluno '137', '5';
+EXEC MatricularAluno '138', '15';
+EXEC MatricularAluno '139', '13';
+EXEC MatricularAluno '140', '1';
+EXEC MatricularAluno '141', '3';
+EXEC MatricularAluno '142', '21';
+EXEC MatricularAluno '143', '10';
+EXEC MatricularAluno '144', '17';
+EXEC MatricularAluno '145', '7';
+EXEC MatricularAluno '146', '24';
+EXEC MatricularAluno '147', '4';
+EXEC MatricularAluno '148', '25';
+EXEC MatricularAluno '149', '19';
+EXEC MatricularAluno '150', '14';
+EXEC MatricularAluno '151', '12';
+EXEC MatricularAluno '152', '9';
+EXEC MatricularAluno '153', '11';
+EXEC MatricularAluno '154', '23';
+EXEC MatricularAluno '155', '16';
+EXEC MatricularAluno '156', '2';
+EXEC MatricularAluno '157', '18';
+EXEC MatricularAluno '158', '20';
+EXEC MatricularAluno '159', '6';
+EXEC MatricularAluno '160', '8';
+EXEC MatricularAluno '161', '22';
+EXEC MatricularAluno '162', '5';
+EXEC MatricularAluno '163', '15';
+EXEC MatricularAluno '164', '13';
+EXEC MatricularAluno '165', '1';
+EXEC MatricularAluno '166', '3';
+EXEC MatricularAluno '167', '21';
+EXEC MatricularAluno '168', '10';
+EXEC MatricularAluno '169', '17';
+EXEC MatricularAluno '170', '7';
+EXEC MatricularAluno '171', '24';
+EXEC MatricularAluno '172', '4';
+EXEC MatricularAluno '173', '25';
+EXEC MatricularAluno '174', '19';
+EXEC MatricularAluno '175', '14';
+EXEC MatricularAluno '176', '12';
+EXEC MatricularAluno '177', '9';
+EXEC MatricularAluno '178', '11';
+EXEC MatricularAluno '179', '23';
+EXEC MatricularAluno '180', '16';
+EXEC MatricularAluno '181', '2';
+EXEC MatricularAluno '182', '18';
+EXEC MatricularAluno '183', '20';
+EXEC MatricularAluno '184', '6';
+EXEC MatricularAluno '185', '8';
+EXEC MatricularAluno '186', '22';
+EXEC MatricularAluno '187', '5';
+EXEC MatricularAluno '188', '15';
+EXEC MatricularAluno '189', '13';
+EXEC MatricularAluno '190', '1';
+EXEC MatricularAluno '191', '3';
+EXEC MatricularAluno '192', '21';
+EXEC MatricularAluno '193', '10';
+EXEC MatricularAluno '194', '17';
+EXEC MatricularAluno '195', '7';
+EXEC MatricularAluno '196', '24';
+EXEC MatricularAluno '197', '4';
+EXEC MatricularAluno '198', '25';
+EXEC MatricularAluno '199', '19';
+EXEC MatricularAluno '200', '14';
+
+--select que mostra: o nome, sobrenome e email dos alunos, o curso que eles estão fazendo e a área do curso
+SELECT 
+    A.Nome AS Nome_Aluno, 
+    A.Sobrenome AS Sobrenome_Aluno, 
+    A.Email AS Email_Aluno, 
+    C.Nome AS Curso, 
+    Ar.Nome AS Area
+FROM 
+    Alunos A
+JOIN 
+    Matriculas M ON A.idAlunos = M.idAlunos
+JOIN 
+    Cursos C ON M.idCursos = C.idCursos
+JOIN 
+    Areas Ar ON C.idAreas = Ar.idAreas;
+
+
+
+
+
