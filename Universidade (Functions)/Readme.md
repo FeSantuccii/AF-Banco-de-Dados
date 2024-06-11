@@ -8,3 +8,7 @@ Modelo Lógico : ![modelologico](https://github.com/FeSantuccii/AF-Banco-de-Dado
 Pré-requisítos: Acesso á qualquer banco de dados SQL
 
 Felipe Santucci - 190236
+
+Select final:![exercicioOhataAF](https://github.com/FeSantuccii/AF-Banco-de-Dados/assets/166468895/13ac7316-6704-445d-96d0-6ec1a479a515)
+
+
